@@ -1,54 +1,71 @@
-
-
 class Book:
-    def __init__(self, title, author, is_checked_out):
+    def __init__(self, title, author):
         self.title = title
         self.author = author
-        self.is_checked_out = is_checked_out
+        self.is_checked_out = False
 
     def is_checked(self):
-        pass
+        self.is_checked_out = True
     
     def return_book(self):
-        pass
+        self.is_checked_out = False
 
     def get_book_details(self):
-        pass
+        print(f"Book title {self.title} \nBook Author {self.author} \nBook is checked {self.is_checked_out}")
 
 class Patrons:
-    def __init__(self, name, id, borrowed_book):
+    def __init__(self, name, id):
         self.name = name
         self.id = id
-        self.borrowed_book = borrowed_book
+        self.borrowed_book = []
 
     def borrow_book(self, book):
-        pass
+        self.borrowed_book.append(book)
+        book.is_checked()
     
     def return_book(self, book):
-        pass
+        self.borrowed_book.remove(book)
+        book.return_book()
 
     def list_borrowed_books(self):
-        pass
+        for book in self.borrowed_book:
+            print(f"Book {book.title} Author {book.author}")
 
 
 class Library:
-    def __init__(self, patrons, books):
-        self.patrons = patrons
-        self.books = books
+    def __init__(self):
+        self.patrons = []
+        self.books = []
 
     def add_book(self, book):
-        pass 
+        self.books.append(book) 
 
     def add_patron(self, patron):
-        pass
+        self.patrons.append(patron)
 
     def find_book(self, title):
-        pass
+        for book in self.books:
+            if book.title == title:
+                print(f'Book {book.title} Author {book.author}')
 
-    def lend_book(self, title, patron_id):
-        pass
+    def lend_book(self, book, patron_id):
+        for patron in self.patrons:
+            if patron.id == patron_id:
+                patron.borrow_book(book)
+                self.books.remove(book)
 
-    def accept_return(self, title, patron_id):
-        pass
+    def accept_return(self, book, patron_id):
+        for patron in self.patrons:
+            if patron.id == patron_id:
+                patron.return_book(book)
+                self.books.append(book)
 
-    
+library = Library()
+
+while True:
+    print("________main page________")
+    print("|  1. Add patron         |")
+    print("|  2. Add Book           |")
+    print("|  3. Find Book          |")
+    print("|  4. Lend Book          |")
+    print("|__5. Accept Book________|")
