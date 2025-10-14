@@ -1,10 +1,5 @@
 import pickle
 FILE_NAME = "PICKLE_FILE.pkl"
-try:
-    with open(FILE_NAME, 'rb') as file:
-        users = pickle.load(file)
-except:
-    users = []
 
 class Account:
     account_number = 1000
@@ -33,6 +28,12 @@ class Account:
     def accountDetails(self):
         print(f'name {self.name} accout num {self.account_number} balance {self.balance}')
 
+try:
+    with open(FILE_NAME, 'rb') as file:
+        users = pickle.load(file)
+except:
+    users = []
+
 if __name__ == "__main__":
     while True:
         print("___________THIS IS THE MAIN PAGE________________")
@@ -49,5 +50,13 @@ if __name__ == "__main__":
             users.append(account)
             with open(FILE_NAME, 'wb') as file:
                 pickle.dump(users,file)
+        elif choice == 2:
+            name = input("ENTER YOUR NAME: ")
+            for i in users:
+                if i.name == name:
+                    print("YOU HAVE ACCESS TO THIS ACCOUNT")
+                    print(i.account_number)
         elif choice == 3:
+            break
+        else:
             pass
