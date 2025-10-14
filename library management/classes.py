@@ -50,12 +50,31 @@ class Library:
 
     def lend_book(self, book, patron_id):
         for patron in self.patrons:
-            if patron.id == patron_id:
+            if patron.id == patron_id and book.is_checked() == False:
                 patron.borrow_book(book)
-                self.books.remove(book)
 
     def accept_return(self, book, patron_id):
         for patron in self.patrons:
             if patron.id == patron_id:
                 patron.return_book(book)
-                self.books.append(book)
+def create_patron():
+    name = input("Enter Patron's Name: ")
+    id = input("Enter Patron's ID: ")
+    return Patrons(name,id)
+
+def new_book():
+    titleauthor = input("Enter Book's Title: ")
+    author = input("Enter Book's Author: ")
+    return Book(titleauthor,author)
+
+def get_book(books):
+    title = input("Enter the Book title: ")
+    for book in books:
+        if book.title == title:
+            return book
+        
+def get_patron(patrons):
+    id = input("Enter the Patron's ID: ")
+    for patron in patrons:
+        if patron.id == id:
+            return patron
