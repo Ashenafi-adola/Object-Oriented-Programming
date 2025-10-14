@@ -1,62 +1,28 @@
 import pickle
 FILE_NAME = "PICKLE_FILE.pkl"
 
-class Account:
-    account_number = 1000
-    def __init__(self, name, balance, password):
+class User:
+    def __init__(self, name, initial, password):
         self.name = name
-        self.balance = balance
+        self.initial = initial
         self.password = password
-        Account.account_number += 1
     
-    def deposite(self, deposite):
-        if deposite > 0:
-            self.balance += deposite
-            print(f"You have sucessfully deposited {deposite} Birr")
-        else:
-            print("Please Enter a valid Amount! ")
-    
-    def withdraw(self, withdraw):
-        if withdraw < self.balance:
-            self.balance -= withdraw
-            print(f"You have sucessfully withdrawed {withdraw} Birr")
-        else:
-            print("You hace insuficient balance! ")
-    def checkBalance(self):
-        print(f"Your balance is {self.balance} Birr")
+    def deposite_money(self):
+        pass
+    def withdraw_money(self):
+        pass
+    def check_balance(self):
+        pass
+    def user_details(self):
+        pass
 
-    def accountDetails(self):
-        print(f'name {self.name} accout num {self.account_number} balance {self.balance}')
+class Bank:
+    def __init__(self):
+        self.users = []
+    def add_user(self):
+        pass
+    def deposite(self):
+        pass
+    def withdraw(self):
+        pass
 
-try:
-    with open(FILE_NAME, 'rb') as file:
-        users = pickle.load(file)
-except:
-    users = []
-
-if __name__ == "__main__":
-    while True:
-        print("___________THIS IS THE MAIN PAGE________________")
-        print("|   1. CREATE ACCOUNT                          |")
-        print("|   2. LOGIN TO ACCOUNT                        |")
-        print("|___3._CLOSE___________________________________|")
-        choice = int(input("ENTER YOUR CHOICE: "))
-        if choice == 1:
-            name = input("ENTER YOUR NAME: ")
-            intial = int(input("ENTER YOUR INTIAL DEPOSITE: "))
-            password = input("ENTER YOUR PASSWORD: ")
-            account = Account(name,intial,password)
-            account.accountDetails()
-            users.append(account)
-            with open(FILE_NAME, 'wb') as file:
-                pickle.dump(users,file)
-        elif choice == 2:
-            name = input("ENTER YOUR NAME: ")
-            for i in users:
-                if i.name == name:
-                    print("YOU HAVE ACCESS TO THIS ACCOUNT")
-                    print(i.account_number)
-        elif choice == 3:
-            break
-        else:
-            pass
