@@ -1,8 +1,11 @@
 from classes import *
+import os
+import time
 
 library = Library()
 
 while True:
+    os.system('cls')
     print(" _______main page________")
     print("|  1. Add patron         |")
     print("|  2. Add Book           |")
@@ -29,3 +32,4 @@ while True:
             get_book(library.books).get_book_details()
         case 7:
             get_patron(library.patrons).list_borrowed_books()
+    time.sleep(2)
