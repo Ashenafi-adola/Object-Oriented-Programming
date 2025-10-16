@@ -1,13 +1,17 @@
-import getpass
+import os
+import time
 
-def main():
-    username = input("Enter your username: ")
-    password = getpass.getpass("Enter your password: ")
+def clear_screen():
+    # For Windows
+    if os.name == 'nt':
+        os.system('cls')
+    
+for i in range(5):
+    clear_screen()
+    print(f"Frame {i+1}")
+    time.sleep(03)
 
-    # In a real application, you would now use 'username' and 'password'
-    # to authenticate the user or perform other secure operations.
-    print(f"Username: {username}")
-    print(f"Password (hidden): {'*' * len(password)}") # Display masked length for demonstration
-
-if __name__ == "__main__":
-    main()
+print("Done")
+time.sleep(2)
+os.system("git add .")
+os.system("git commit -m'checking'")
