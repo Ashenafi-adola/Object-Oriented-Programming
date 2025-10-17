@@ -1,48 +1,6 @@
 import os
-
-class Player:
-    def __init__(self, name, inventory, location):
-        self.name = name
-        self.inventory = []
-        self.location = location
-
-    def move(self, direction):
-        pass
-
-    def take_item(self, item):
-        self.inventory.append(item)
-
-    def drop_item(self, item):
-        self.inventory.remove(item)
-
-    def show_inventory(self):
-        for i in self.inventory:
-            print(i.name)
-
-class Room:
-    def __init__(self, name, description):
-        self.name = name 
-        self.description = description
-        self.exits = dict
-        self.items = []
-
-    def describe(self):
-        print(self.description)
-
-    def add_item(self, item):
-        self.items.append(item)
-
-    def remove_item(self, item):
-        self.items.remove(item)
-
-class Item:
-    def __init__(self, name, description):
-        self.name = name
-        self.description = description
-        self.can_be_taken = bool
-
-    def describe(self):
-        print(self.description)
+import time
+from theModule import *
 
 Lobby = Room(
     'Lobby',
@@ -55,7 +13,7 @@ Kitchen = Room(
     "Kitchen",
     "The kitchen is filled with cobwebs. A recipe book lies on the counter. The only exit is back west."
 )
-Kitchen.exits = {"west": "to kitchen"}
+Kitchen.exits = {"west": "to lobby"}
 Kitchen.items = ['books']
 
 Library = Room(
@@ -70,3 +28,37 @@ Hellway = Room(
     "A long hallway with doors to the north and east."
 )
 Hellway.exits = {"north": "to library"}
+
+player = Player(
+    "ashe",
+    Lobby
+)
+player.inventory = ["book", "Knife", "keys"]
+os.system('cls')
+while True:
+    command = input("Enter your command: ")
+    if command == "go":
+        direction = input("Enter tool: ")
+        time.sleep(2)
+    if command == "use":
+        tool = input("Enter direction: ")
+        player.use_item(tool)
+        time.sleep(2)
+    elif command == "describe":
+        player.location.describe()
+        time.sleep(3)
+    elif command == "drop":
+        item = input("Enter item name: ")
+        player.drop_item(item)
+        time.sleep(3)
+    elif command == "pick":
+        item = input("Enter item name: ")
+        player.take_item(item)
+        time.sleep(3)
+    elif command == "my items":
+        player.show_inventory()
+        time.sleep(3)
+    elif command == "show items":
+        player.location.show_items()
+        time.sleep(3)
+    os.system('cls')
