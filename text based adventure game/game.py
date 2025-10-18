@@ -2,43 +2,12 @@ import os
 import time
 from theModule import *
 
-Lobby = Room(
-    'Lobby',
-    "You are in a dusty lobby. To the north is a locked door. To the east is a kitchen. A rusty key sits on a table."
-)
-Lobby.exits = {"north": 'locked', "east": "to kitchen"}
-Lobby.items = ['keys']
-
-Kitchen = Room(
-    "Kitchen",
-    "The kitchen is filled with cobwebs. A recipe book lies on the counter. The only exit is back west."
-)
-Kitchen.exits = {"west": "to lobby"}
-Kitchen.items = ['books']
-
-Library = Room(
-    "Library",
-    "A grand library filled with ancient texts. A strange lockbox sits on a desk."
-)
-Library.exits = {"south": "to hellway"}
-Library.items = ["lockbox"]
-
-Hellway = Room(
-    "Hellway",
-    "A long hallway with doors to the north and east."
-)
-Hellway.exits = {"north": "to library"}
-
-player = Player(
-    "ashe",
-    Lobby
-)
-player.inventory = ["book", "Knife", "keys"]
 os.system('cls')
 while True:
     command = input("Enter your command: ")
     if command == "go":
-        direction = input("Enter tool: ")
+        direction = input("Enter direction: ")
+        player.move(direction)
         time.sleep(2)
     if command == "use":
         tool = input("Enter direction: ")
