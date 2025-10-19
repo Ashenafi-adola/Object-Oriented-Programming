@@ -30,7 +30,7 @@ class Bank:
         user.withdraw_money(withdraw)
     def show_all_users(self):
         for user in self.users:
-            print(f"Name is {user.name} \nBalance is {user.balance}")
+            print(f"Name is {user.name} Balance is {user.balance}")
 
 bank = Bank()
 with open(FILE_NAME, 'rb') as file:
@@ -44,10 +44,11 @@ def create_account():
 
 def get_user(users):
     name = input("Enter the user name: ")
+    password = input("Enter your password: ")
     for user in users:
-        if user.name == name:
+        if user.name == name and user.password == password:
             return user
-
+os.system('cls')
 while True:
     print(" _______main page________")
     print("|  1. New Account        |")
