@@ -16,11 +16,11 @@ class Player:
         else:print("unknown direction!go")
 
     def take_item(self, item):
-        if item in self.inventory:
+        if item in self.location.items:
             self.inventory.append(item)
             self.location.remove_item(item)
         else:
-            print(f"player does't have item {item}")
+            print(f"This room does't have item {item}")
 
     def use_item(self, item):
         if item in self.inventory:

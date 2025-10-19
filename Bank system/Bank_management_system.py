@@ -1,6 +1,7 @@
 import pickle
+import os, time
 FILE_NAME = "PICKLE_FILE.pkl"
-
+users = []
 class User:
     def __init__(self, name, balance, password):
         self.name = name
@@ -24,13 +25,16 @@ class Bank:
     def deposite(self, user):
         deposite = int(input("Enter Deposite Amount: "))
         user.deposite_money(deposite)
-    def withdraw(self, user, withdraw):
+    def withdraw(self, user):
+        withdraw = int(input("Enter withdraw amount: "))
         user.withdraw_money(withdraw)
     def show_all_users(self):
         for user in self.users:
             print(f"Name is {user.name} \nBalance is {user.balance}")
 
 bank = Bank()
+with open(FILE_NAME, 'rb') as file:
+    bank.users = pickle.load(file)
 
 def create_account():
     name = input("Enter User's Name: ")
@@ -43,21 +47,37 @@ def get_user(users):
     for user in users:
         if user.name == name:
             return user
-        
+
 while True:
     print(" _______main page________")
     print("|  1. New Account        |")
     print("|  2. Deposite           |")
     print("|  3. Withdraw           |")
     print("|  4. Balance            |")
+    print("|  5. all users          |")
+    print("|  6. close              |")
     print("|________________________|")
     choice = int(input("ENTER YOUR CHOICE: "))
     match choice:
         case 1:
             bank.new_user(create_account())
+
         case 2:
             bank.deposite(get_user(bank.users))
         case 3:
-            bank.deposite(get_user(bank.users))
+            bank.withdraw(get_user(bank.users))
         case 4:
-            get_user(bank.users).check_balance()
+            try:
+                get_user(bank.users).check_balance()
+            except:
+                print("user not found")
+            time.sleep(4)
+        case 5:
+            bank.show_all_users()
+            time.sleep(4)
+        case 6:
+            with open(FILE_NAME, 'wb') as file:
+                pickle.dump(bank.users, file)
+            break
+    
+    os.system('cls')

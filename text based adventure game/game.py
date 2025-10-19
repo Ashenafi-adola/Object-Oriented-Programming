@@ -4,7 +4,9 @@ from theModule import *
 
 os.system('cls')
 while True:
+    print(player.location.describe())
     command = input("Enter your command: ")
+    
     if command == "go":
         direction = input("Enter direction: ")
         player.move(direction)
