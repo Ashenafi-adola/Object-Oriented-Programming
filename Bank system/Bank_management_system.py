@@ -62,7 +62,6 @@ while True:
     match choice:
         case 1:
             bank.new_user(create_account())
-
         case 2:
             bank.deposite(get_user(bank.users))
         case 3:
@@ -80,5 +79,6 @@ while True:
             with open(FILE_NAME, 'wb') as file:
                 pickle.dump(bank.users, file)
             break
-    
+        case _:
+            print("Invalid Input")
     os.system('cls')
