@@ -3,45 +3,36 @@ class Book:
         self.title = title
         self.author = author
         self.is_checked_out = False
-
     def is_checked(self):
         self.is_checked_out = True
-    
     def return_book(self):
         self.is_checked_out = False
-
     def get_book_details(self):
         print(f"Book title {self.title} \nBook Author {self.author} \nBook is checked {self.is_checked_out}")
-
 class Patrons:
     def __init__(self, name, id):
         self.name = name
         self.id = id
         self.borrowed_book = []
-
     def borrow_book(self, book):
         self.borrowed_book.append(book)
         book.is_checked()
-    
     def return_book(self, book):
-        self.borrowed_book.remove(book)
-        book.return_book()
-
+        for i in self.borrowed_book:
+            if book.title == i.title:
+                self.borrowed_book.remove(i)
+                book.return_book()
     def list_borrowed_books(self):
         for book in self.borrowed_book:
             print(f"Book {book.title} Author {book.author}")
-
 class Library:
     def __init__(self):
         self.patrons = []
         self.books = []
-
     def add_book(self, book):
         self.books.append(book)
-
     def add_patron(self, patron):
         self.patrons.append(patron)
-        
     def find_book(self, title):
         for book in self.books:
             if book.title == title:
@@ -50,6 +41,7 @@ class Library:
         try:
             if not book.is_checked():
                 patron.borrow_book(book)
+                self.books.remove(book)
             else:print("The book is lended!")
         except:
             print('patron not found')
@@ -58,8 +50,9 @@ class Library:
     def show_all_users(self):
         for user in self.patrons:
             print(f'{user.name} {user.id}')
-
-
+    def show_all_books(self):
+        for book in self.books:
+            print(f"{book.title} {book.is_checked_out} {book.author}")
 def create_patron():
     name = input("Enter Patron's Name: ")
     id = input("Enter Patron's ID: ")

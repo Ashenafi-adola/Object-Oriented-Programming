@@ -1,6 +1,5 @@
 from classes import *
-import os
-import time, pickle
+import time, pickle, os
 file_name = "Patrons_list.pkl"
 second_file = "Books_list.pkl"
 try:
@@ -15,10 +14,8 @@ try:
 except:
     books = []
 library = Library()
-
 library.patrons = patrons
 library.books = books
-
 while True:
     os.system('cls')
     print(" _______main page________")
@@ -31,6 +28,7 @@ while True:
     print("|  7. Borrowed Books     |")
     print("|  8. save data          |")
     print("|  9. all patrons        |")
+    print('|  10. all books         |')
     print("|________________________|")
     choice = int(input("ENTER YOUR CHOICE: "))
     match choice:
@@ -57,6 +55,8 @@ while True:
             break
         case 9:
             library.show_all_users()
+        case 10:
+            library.show_all_books()
         case _:
             print("Invalid input")
     time.sleep(2)
