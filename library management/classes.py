@@ -46,14 +46,20 @@ class Library:
         for book in self.books:
             if book.title == title:
                 print(f'Book {book.title} Author {book.author}')
-    def lend_book(self, book, patron_id):
-        for patron in self.patrons:
-            if patron.id == patron_id and book.is_checked() == False:
+    def lend_book(self, book, patron):
+        try:
+            if not book.is_checked():
                 patron.borrow_book(book)
-    def accept_return(self, book, patron_id):
-        for patron in self.patrons:
-            if patron.id == patron_id:
-                patron.return_book(book)
+            else:print("The book is lended!")
+        except:
+            print('patron not found')
+    def accept_return(self, book, patron):
+        patron.return_book(book)
+    def show_all_users(self):
+        for user in self.patrons:
+            print(f'{user.name} {user.id}')
+
+
 def create_patron():
     name = input("Enter Patron's Name: ")
     id = input("Enter Patron's ID: ")
