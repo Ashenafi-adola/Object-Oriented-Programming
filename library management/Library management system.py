@@ -27,8 +27,6 @@ while True:
     print("|  6. Get Book Details   |")
     print("|  7. Borrowed Books     |")
     print("|  8. save data          |")
-    print("|  9. all patrons        |")
-    print('|  10. all books         |')
     print("|________________________|")
     choice = int(input("ENTER YOUR CHOICE: "))
     match choice:
@@ -53,10 +51,6 @@ while True:
             with open(second_file, 'wb') as file:
                 pickle.dump(library.books, file)
             break
-        case 9:
-            library.show_all_users()
-        case 10:
-            library.show_all_books()
         case _:
             print("Invalid input")
     time.sleep(2)
