@@ -1,5 +1,3 @@
-import os, time
-
 class BankAccount:
     name = "My bank"
     account_number = 0
@@ -8,48 +6,81 @@ class BankAccount:
         self.balance = intial
         BankAccount.account_number += 1
         self.account_number = str(BankAccount.account_number).zfill(4)
-    
+        
     def deposite(self, deposite):
-        self.balance += deposite
+        if BankAccount.is_valid_amount(deposite):
+            self.balance += deposite
+            print("deposite succesful!")
+        else:
+            print("enter amount greater than 0")
     
     def withdraw(self, withdraw):
-        self.balance -= withdraw
-
+        if withdraw > self.balance:
+            self.balance -= withdraw
+            print("withdraw succesful!")
+        else:
+            print("you have no sufficient balance")
+    
+    @staticmethod
+    def is_valid_amount(amount):
+        if amount > 0:
+            return True
+        else:
+            return False
     def check_balance(self):
         print(f"your balance is {self.balance} birr")
 
-accounts = []
-os.system('cls')
-while True:
-    os.system('cls')
-    print("_______my_bank_______")
-    print("1. New Account")
-    print("2. deposite")
-    print("3. withdraw")
-    print("4. checke balance")
-    choice = int(input("Enter you option: "))
-    match choice:
-        case 1:
-            name = input("Enter your name: ")
-            intial = float(input("Enter your intial deposite: "))
-            account = BankAccount(name, intial)
-            accounts.append(account)
-        case 2:
-            account_number = input("Enter your account number: ")
-            for account in accounts:
-                if account.account_number == account_number:
-                    deposite = int(input("Enter deposite amount: "))
-                    account.deposite(deposite)
-            time.sleep(4)
-        case 3:
-            account_number = input("Enter your account_number: ")
-            for account in accounts:
-                if account.account_number == account_number:
-                    withdraw = int(input("Enter withdraw amount: "))
-                    account.withdraw(withdraw)
-        case 4:
-            account_number = input("Enter your name: ")
-            for account in accounts:
-                if account.account_number == account_number :
-                    account.check_balance()
-            time.sleep(2)
+    @classmethod
+    def starter_account(cls, owner):
+        return cls(owner, 0)
+
+class SavingsAccount(BankAccount):
+    def __init__(self,owner, intial, interest_rate):
+        super().__init__(owner, intial)
+        self.interest_rate = interest_rate
+    
+    def apply_interest(self):
+        interest = self.balance * self.interest_rate
+        self.balance += interest
+
+class CheckingAccount(BankAccount):
+    def __init__(self, owner, intial, overdraft_limit):
+        super().__init__(owner, intial)
+        self.overdraft_limit = overdraft_limit
+    
+    def withdraw(self, amount):
+        if super().is_valid_amount(amount) :
+            if amount <= self.balance + self.overdraft_limit:
+                self.balance -= amount
+                print(f"withdrew ${amount}. New Balance ${self.balance}")
+            else:
+                print("Insufficient funds (even with overdraft).")
+        else:
+            print("You enter invalid amount")
+
+# --- TESTING SCRIPT ---
+
+print("\n--- Testing Savings Account ---")
+# 1. Create a Savings Account with 5% interest
+saver = SavingsAccount("Sam", 1000, 0.05) 
+
+# 2. Check that the ID auto-incremented correctly from previous accounts
+print(f"Saver ID: {saver.account_number}") 
+
+# 3. Apply Interest
+saver.apply_interest() 
+# Expected Output: Interest applied. New Balance: $1050.0
+saver.check_balance()
+
+print("\n--- Testing Checking Account ---")
+# 1. Create a Checking Account with a $100 overdraft limit
+spender = CheckingAccount("Casey", 50, 100) 
+
+# 2. Withdraw more than the balance (but within overdraft)
+print(f"Current Balance: ${spender.balance}") # $50
+spender.withdraw(120) 
+# Expected Output: Withdrew $120. New Balance: $-70
+
+# 3. Try to withdraw too much (over limit)
+spender.withdraw(100)
+# Expected Output: Insufficient funds (even with overdraft).
