@@ -1,9 +1,11 @@
-class BankAccount:
+from abc import ABC, abstractmethod
+
+class BankAccount(ABC):
     name = "My bank"
     account_number = 0
     def __init__(self, name, intial):
         self.name = name
-        self.balance = intial
+        self._balance = intial
         BankAccount.account_number += 1
         self.account_number = str(BankAccount.account_number).zfill(4)
         
@@ -13,13 +15,25 @@ class BankAccount:
             print("deposite succesful!")
         else:
             print("enter amount greater than 0")
+
+    @abstractmethod
+    def deduct_monthly_fee(self):
+        pass
+
+    @property
+    def balance(self):
+        return self._balance
     
-    def withdraw(self, withdraw):
-        if withdraw > self.balance:
-            self.balance -= withdraw
-            print("withdraw succesful!")
+    @balance.setter
+    def balance(self, new_value):
+        if new_value >= 0:
+            self._balance = new_value
         else:
-            print("you have no sufficient balance")
+            print("Security Alert: Cannot manually set negative balance.")
+    
+    @abstractmethod
+    def withdraw(self, withdraw):
+        pass
     
     @staticmethod
     def is_valid_amount(amount):
@@ -32,8 +46,9 @@ class BankAccount:
 
     @classmethod
     def starter_account(cls, owner):
+        cls.name ="hjhj"
         return cls(owner, 0)
-
+    
 class SavingsAccount(BankAccount):
     def __init__(self,owner, intial, interest_rate):
         super().__init__(owner, intial)
@@ -42,6 +57,16 @@ class SavingsAccount(BankAccount):
     def apply_interest(self):
         interest = self.balance * self.interest_rate
         self.balance += interest
+
+    def deduct_monthly_fee(self):
+        pass
+
+    def withdraw(self, withdraw):
+        if withdraw > self.balance:
+            self.balance -= withdraw
+            print("withdraw succesful!")
+        else:
+            print("you have no sufficient balance")
 
 class CheckingAccount(BankAccount):
     def __init__(self, owner, intial, overdraft_limit):
@@ -58,29 +83,37 @@ class CheckingAccount(BankAccount):
         else:
             print("You enter invalid amount")
 
-# --- TESTING SCRIPT ---
+    def deduct_monthly_fee(self):
+        self.balance -= 12
 
-print("\n--- Testing Savings Account ---")
-# 1. Create a Savings Account with 5% interest
-saver = SavingsAccount("Sam", 1000, 0.05) 
 
-# 2. Check that the ID auto-incremented correctly from previous accounts
-print(f"Saver ID: {saver.account_number}") 
 
-# 3. Apply Interest
-saver.apply_interest() 
-# Expected Output: Interest applied. New Balance: $1050.0
-saver.check_balance()
+# --- TESTING THE ARCHITECTURE ---
 
-print("\n--- Testing Checking Account ---")
-# 1. Create a Checking Account with a $100 overdraft limit
-spender = CheckingAccount("Casey", 50, 100) 
+print("\n--- Testing Abstraction ---")
+try:
+    # 1. Try to create a generic account (Should Fail)
+    generic = BankAccount("Ghost", 0)
+    print("ERROR: Generic BankAccount was created! (Abstraction failed)")
+except TypeError:
+    print("SUCCESS: Cannot create generic BankAccount. (Abstraction working)")
 
-# 2. Withdraw more than the balance (but within overdraft)
-print(f"Current Balance: ${spender.balance}") # $50
-spender.withdraw(120) 
-# Expected Output: Withdrew $120. New Balance: $-70
+print("\n--- Testing Specific Accounts ---")
+saver = SavingsAccount("Alice", 1000, 0.05)
+checker = CheckingAccount("Bob", 500, 100)
 
-# 3. Try to withdraw too much (over limit)
-spender.withdraw(100)
-# Expected Output: Insufficient funds (even with overdraft).
+# 2. Test the forced method
+print(f"Bob's Balance before fee: ${checker.balance}")
+checker.deduct_monthly_fee()
+print(f"Bob's Balance after fee ($12): ${checker.balance}") # Should be $488
+
+print("\n--- Testing Encapsulation ---")
+# 3. Try to set a valid balance
+saver.balance = 2000
+print(f"Alice's New Balance: ${saver.balance}") # Should be 2000
+
+# 4. Try to hack the balance (The Setter should block this)
+print("Attempting to set negative balance...")
+saver.balance = -500
+print(f"Alice's Balance is still: ${saver.balance}") # Should still be 2000
+
